@@ -221,15 +221,26 @@
                 </div>
 
 
-                <button
-                    class="route-button"
-                    onclick="findRoute()">
+                <div class="route-actions">
 
-                    <span>Find Route</span>
+    <button
+        class="route-button"
+        onclick="findRoute()">
 
-                    <span>→</span>
+        <span>Find Route</span>
+        <span>→</span>
 
-                </button>
+    </button>
+
+    <button
+        class="clear-route-button"
+        onclick="clearNavigation()">
+
+        Clear Route
+
+    </button>
+
+</div>
 
             </div>
 
@@ -260,7 +271,27 @@
         </aside>
 
 
+<!-- CAMPUS STATUS -->
 
+<div class="campus-status-card">
+
+    <div class="status-card-icon">
+        🏫
+    </div>
+
+    <div>
+        <strong>Campus Navigation Ready</strong>
+
+        <p>
+            10 locations • Interactive route guidance
+        </p>
+    </div>
+
+    <span class="ready-badge">
+        ● READY
+    </span>
+
+</div>
         <!-- ========== RIGHT MAP PANEL ========== -->
 
         <section class="map-section">
