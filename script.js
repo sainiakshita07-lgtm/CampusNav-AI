@@ -633,3 +633,134 @@ function askAssistant() {
     answer.style.display = "block";
 
 }
+// ========================================
+// HACKATHON IMPROVEMENTS
+// ========================================
+
+
+// CLEAR COMPLETE NAVIGATION
+function clearNavigation() {
+
+    clearRoute();
+
+    const summary =
+        document.getElementById("routeSummary");
+
+    summary.innerHTML = `
+        <div class="summary-placeholder">
+
+            <div class="placeholder-icon">
+                🗺️
+            </div>
+
+            <p>
+                Route cleared.<br>
+                Select two locations to start again.
+            </p>
+
+        </div>
+    `;
+}
+
+
+// GENERATE STEP-BY-STEP ROUTE
+function showRouteInstructions(path) {
+
+    const summary =
+        document.getElementById("routeSummary");
+
+    if (!path || path.length < 2) {
+        return;
+    }
+
+    let instructions = `
+        <div class="route-instructions">
+
+            <div class="route-instructions-title">
+                🧭 Navigation Steps
+            </div>
+    `;
+
+    for (let i = 1; i < path.length; i++) {
+
+        const previous =
+            locations[path[i - 1]].name;
+
+        const current =
+            locations[path[i]].name;
+
+        instructions += `
+            <div class="route-step">
+
+                <span class="route-step-number">
+                    ${i}
+                </span>
+
+                <span>
+                    Walk from
+                    <strong>${previous}</strong>
+                    to
+                    <strong>${current}</strong>
+                </span>
+
+            </div>
+        `;
+    }
+
+    instructions += `
+        </div>
+    `;
+
+    summary.insertAdjacentHTML(
+        "beforeend",
+        instructions
+    );
+}
+
+
+// ENTER KEY FOR CAMPUS ASSISTANT
+
+const assistantInput =
+    document.getElementById("question");
+
+if (assistantInput) {
+
+    assistantInput.addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+                askAssistant();
+            }
+
+        }
+    );
+}
+
+
+// MAP LOCATION CLICK
+
+document
+    .querySelectorAll(".map-location")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            function() {
+
+                const location =
+                    this.dataset.location;
+
+                const destination =
+                    document.getElementById(
+                        "destination"
+                    );
+
+                destination.value = location;
+
+                findRoute();
+
+            }
+        );
+
+    });
