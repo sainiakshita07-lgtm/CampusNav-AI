@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>CampusNav AI | Smart Campus Navigation</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="topbar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🧭
+            </div>
+
+            <div>
+
+                <h1>CampusNav AI</h1>
+
+                <p>
+                    Smart Campus Navigation Assistant
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="status">
+
+            <span class="status-dot"></span>
+
+            Campus Connected
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ================= MAIN DASHBOARD ================= -->
+
+    <main class="dashboard">
+
+
+        <!-- ========== LEFT PANEL ========== -->
+
+        <aside class="sidebar">
+
+
+            <div class="welcome">
+
+                <span class="small-label">
+                    CAMPUS GUIDE
+                </span>
+
+                <h2>
+                    Find your way
+                    <span>faster.</span>
+                </h2>
+
+                <p>
+                    Select your starting point and
+                    destination to get a clear route.
+                </p>
+
+            </div>
+
+
+
+            <!-- LOCATION SELECTOR -->
+
+            <div class="navigation-box">
+
+                <div class="section-title">
+
+                    <span>🧭</span>
+
+                    <h3>Plan Your Route</h3>
+
+                </div>
+
+
+                <label>
+                    Current Location
+                </label>
+
+                <div class="select-wrapper">
+
+                    <span>📍</span>
+
+                    <select id="start">
+
+                        <option value="gate">
+                            Main Gate
+                        </option>
+
+                        <option value="reception">
+                            Reception Area
+                        </option>
+
+                        <option value="block1">
+                            Block 1
+                        </option>
+
+                        <option value="library">
+                            Library — Block 1, 1st Floor
+                        </option>
+
+                        <option value="block2">
+                            Block 2
+                        </option>
+
+                        <option value="cslab">
+                            CS Lab — Block 2, 1st Floor
+                        </option>
+
+                        <option value="block3">
+                            Block 3
+                        </option>
+
+                        <option value="communication">
+                            Communication Lab — Block 3, 1st Floor
+                        </option>
+
+                        <option value="canteen">
+                            Canteen
+                        </option>
+
+                        <option value="parking">
+                            Parking
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="swap-row">
+
+                    <button
+                        class="swap-btn"
+                        onclick="swapLocations()">
+
+                        ⇅
+
+                    </button>
+
+                </div>
+
+
+
+                <label>
+                    Destination
+                </label>
+
+                <div class="select-wrapper">
+
+                    <span>🎯</span>
+
+                    <select id="destination">
+
+                        <option value="cslab">
+                            CS Lab — Block 2, 1st Floor
+                        </option>
+
+                        <option value="library">
+                            Library — Block 1, 1st Floor
+                        </option>
+
+                        <option value="communication">
+                            Communication Lab — Block 3, 1st Floor
+                        </option>
+
+                        <option value="reception">
+                            Reception Area
+                        </option>
+
+                        <option value="block1">
+                            Block 1
+                        </option>
+
+                        <option value="block2">
+                            Block 2
+                        </option>
+
+                        <option value="block3">
+                            Block 3
+                        </option>
+
+                        <option value="canteen">
+                            Canteen
+                        </option>
+
+                        <option value="parking">
+                            Parking
+                        </option>
+
+                        <option value="gate">
+                            Main Gate
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    class="route-button"
+                    onclick="findRoute()">
+
+                    <span>Find Route</span>
+
+                    <span>→</span>
+
+                </button>
+
+            </div>
+
+
+
+            <!-- ROUTE SUMMARY -->
+
+            <div
+                id="routeSummary"
+                class="route-summary">
+
+                <div class="summary-placeholder">
+
+                    <div class="placeholder-icon">
+                        🗺️
+                    </div>
+
+                    <p>
+                        Select two locations to
+                        see your route.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </aside>
+
+
+
+        <!-- ========== RIGHT MAP PANEL ========== -->
+
+        <section class="map-section">
+
+
+            <div class="map-header">
+
+                <div>
+
+                    <span class="small-label">
+                        LIVE CAMPUS MAP
+                    </span>
+
+                    <h2>
+                        Campus Overview
+                    </h2>
+
+                </div>
+
+
+                <div class="map-legend">
+
+                    <span>
+                        <i class="legend-start"></i>
+                        Start
+                    </span>
+
+                    <span>
+                        <i class="legend-destination"></i>
+                        Destination
+                    </span>
+
+                    <span>
+                        <i class="legend-route"></i>
+                        Route
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- MAP -->
+
+            <div class="map-container">
+
+
+                <!-- SVG ROUTE LAYER -->
+
+                <svg
+                    id="routeSvg"
+                    class="route-svg"
+                    viewBox="0 0 1000 650"
+                    preserveAspectRatio="none">
+
+                    <polyline
+                        id="routeLine"
+                        points=""
+                        fill="none"
+                        stroke="#2563eb"
+                        stroke-width="8"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-dasharray="14 8">
+                    </polyline>
+
+                    <circle
+                        id="startMarker"
+                        cx="0"
+                        cy="0"
+                        r="13"
+                        fill="#22c55e"
+                        stroke="white"
+                        stroke-width="5"
+                        opacity="0">
+                    </circle>
+
+                    <circle
+                        id="destinationMarker"
+                        cx="0"
+                        cy="0"
+                        r="13"
+                        fill="#ef4444"
+                        stroke="white"
+                        stroke-width="5"
+                        opacity="0">
+                    </circle>
+
+                </svg>
+
+
+
+                <!-- ROAD / PATH -->
+
+                <div class="campus-road road-main"></div>
+
+                <div class="campus-road road-left"></div>
+
+                <div class="campus-road road-right"></div>
+
+
+
+                <!-- LOCATIONS -->
+
+                <button
+                    class="map-location gate"
+                    data-location="gate">
+
+                    <strong>🚪</strong>
+
+                    <span>Main Gate</span>
+
+                </button>
+
+
+                <button
+                    class="map-location reception"
+                    data-location="reception">
+
+                    <strong>🛎️</strong>
+
+                    <span>Reception</span>
+
+                </button>
+
+
+                <button
+                    class="map-location block1"
+                    data-location="block1">
+
+                    <strong>🏢</strong>
+
+                    <span>Block 1</span>
+
+                </button>
+
+
+                <button
+                    class="map-location library"
+                    data-location="library">
+
+                    <strong>📚</strong>
+
+                    <span>Library</span>
+
+                    <small>1st Floor</small>
+
+                </button>
+
+
+                <button
+                    class="map-location block2"
+                    data-location="block2">
+
+                    <strong>🏢</strong>
+
+                    <span>Block 2</span>
+
+                </button>
+
+
+                <button
+                    class="map-location cslab"
+                    data-location="cslab">
+
+                    <strong>💻</strong>
+
+                    <span>CS Lab</span>
+
+                    <small>1st Floor</small>
+
+                </button>
+
+
+                <button
+                    class="map-location block3"
+                    data-location="block3">
+
+                    <strong>🏢</strong>
+
+                    <span>Block 3</span>
+
+                </button>
+
+
+                <button
+                    class="map-location communication"
+                    data-location="communication">
+
+                    <strong>🎤</strong>
+
+                    <span>Communication Lab</span>
+
+                    <small>1st Floor</small>
+
+                </button>
+
+
+                <button
+                    class="map-location canteen"
+                    data-location="canteen">
+
+                    <strong>🍴</strong>
+
+                    <span>Canteen</span>
+
+                </button>
+
+
+                <button
+                    class="map-location parking"
+                    data-location="parking">
+
+                    <strong>🅿️</strong>
+
+                    <span>Parking</span>
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- QUICK ACCESS -->
+
+            <div class="quick-section">
+
+                <div>
+
+                    <span class="small-label">
+                        QUICK ACCESS
+                    </span>
+
+                    <h3>
+                        Popular Locations
+                    </h3>
+
+                </div>
+
+
+                <div class="quick-buttons">
+
+                    <button onclick="quickDestination('library')">
+                        📚 Library
+                    </button>
+
+                    <button onclick="quickDestination('cslab')">
+                        💻 CS Lab
+                    </button>
+
+                    <button onclick="quickDestination('communication')">
+                        🎤 Communication Lab
+                    </button>
+
+                    <button onclick="quickDestination('canteen')">
+                        🍴 Canteen
+                    </button>
+
+                    <button onclick="quickDestination('parking')">
+                        🅿️ Parking
+                    </button>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= ASSISTANT ================= -->
+
+    <section class="assistant-section">
+
+        <div class="assistant-inner">
+
+            <div class="assistant-icon">
+                🤖
+            </div>
+
+            <div class="assistant-text">
+
+                <span class="small-label">
+                    CAMPUS ASSISTANT
+                </span>
+
+                <h2>
+                    Need help finding a place?
+                </h2>
+
+                <p>
+                    Ask CampusNav about Library,
+                    CS Lab, Communication Lab,
+                    Canteen or Parking.
+                </p>
+
+            </div>
+
+
+            <div class="assistant-input">
+
+                <input
+                    id="question"
+                    type="text"
+                    placeholder="Where is the CS Lab?">
+
+                <button onclick="askAssistant()">
+                    Ask →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="assistantAnswer"
+            class="assistant-answer">
+        </div>
+
+    </section>
+
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer>
+
+        <strong>
+            🧭 CampusNav AI
+        </strong>
+
+        <span>
+            Hacktoberfest '26 • Smart Campus Navigation
+        </span>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
